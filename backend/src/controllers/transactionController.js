@@ -18,7 +18,7 @@ const getTestingData = async (req, res) => {
   try {
     const response = await Transaction.find();
     console.log("this is testing" , response)
-    res.send(response.data);
+    res.send(response);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

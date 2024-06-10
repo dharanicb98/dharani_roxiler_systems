@@ -11,7 +11,8 @@ const TransactionTable = ({ month }) => {
     try {
       // const response = await getTransactions(month, search, page);
       const response = await getChartTransaction();
-      setTransactions(response)
+      console.log("this chat" , response.data)
+      setTransactions(response.data)
     }
     catch(err){
       console.log("error" , err?.message)
@@ -34,19 +35,21 @@ console.log("transactions" , transactions)
           <tr>
             <th>Title</th>
             <th>Description</th>
+            <th>Category</th>
             <th>Price</th>
             <th>Date of Sale</th>
           </tr>
         </thead>
         <tbody>
-          {/* {transactions?.map(transaction => (
+          {transactions?.map((transaction, index) => (
             <tr key={transaction._id}>
               <td>{transaction.title}</td>
               <td>{transaction.description}</td>
+              <td>{transaction.category}</td>
               <td>{transaction.price}</td>
               <td>{new Date(transaction.dateOfSale).toLocaleDateString()}</td>
             </tr>
-          ))} */}
+          ))}
         </tbody>
       </table>
       <button className="bg-[#007bff] hover:bg-slate-700 text-white font-bold py-2 mx-3 my-3 px-4 rounded sm:text-[16px] self-center" onClick={() => setPage(page - 1)} disabled={page === 1}>Previous</button>
