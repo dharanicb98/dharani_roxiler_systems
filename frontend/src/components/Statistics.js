@@ -22,7 +22,8 @@ const Statistics = ({ month }) => {
   console.log("statistics" , statistics)
 
   return (
-    <div>
+    <div className='flex flex-col mx-10'>
+      <h1 className='font-bold text-gray-900'>Statistics</h1>
       <p>Total Sales: {statistics?.totalSales}</p>
       <p>Sold Items: {statistics?.soldItems}</p>
       <p>Not Sold Items: {statistics?.notSoldItems}</p>

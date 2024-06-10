@@ -16,6 +16,6 @@ router.get('/statistics', getStatistics);
 router.get('/barchart', getBarChart);
 router.get('/piechart', getPieChart);
 router.get('/combined', getCombinedData);
-router.get('/testing', getTestingData);
+router.get('/', getTestingData);
 
 module.exports = router;

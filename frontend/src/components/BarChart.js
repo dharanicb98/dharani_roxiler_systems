@@ -21,7 +21,9 @@ const BarChartComponent = ({ month }) => {
 console.log("this barchat" , data)
 
   return (
-    <BarChart width={600} height={300} data={data}>
+    <div className='h-screen flex justify-center items-center my-4'>
+      <h1 className='font-bold text-gray-900'>BarChart</h1>
+      <BarChart width={600} height={300} data={data}>
       <CartesianGrid strokeDasharray="3 3" />
       <XAxis dataKey="range" />
       <YAxis />
@@ -29,6 +31,7 @@ console.log("this barchat" , data)
       <Legend />
       <Bar dataKey="count" fill="#8884d8" />
     </BarChart>
+    </div>
   );
 };
 

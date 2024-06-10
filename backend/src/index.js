@@ -17,7 +17,10 @@ app.use('/transactions', transactionRoutes);
 const mongoUri = 'mongodb+srv://dharanicb:CbDharani%40143@cluster0.xppoe7h.mongodb.net/transactions?retryWrites=true&w=majority';
 
 mongoose.connect(mongoUri, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => app.listen(PORT, () => console.log(`Server running on port ${PORT}`)))
+  .then((response) => {
+    // console.log("backend data is comming" , response)
+    app.listen(PORT, () => console.log(`Server running on port ${PORT}`))
+  })
   .catch((error) => console.log(error.message));
 
 const connection = mongoose.connection;

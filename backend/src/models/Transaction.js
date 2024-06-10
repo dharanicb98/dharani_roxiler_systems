@@ -6,7 +6,10 @@ const transactionSchema = new mongoose.Schema({
   price: Number,
   dateOfSale: Date,
   category: String,
-  sold: Boolean
+  sold: Boolean ,
+  image : String,
 });
 
 module.exports = mongoose.model('Transaction', transactionSchema);
+
+

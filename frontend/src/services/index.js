@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const baseUrl = "http://localhost:5000/transactions";
+const baseUrl = process.env.baseUrl || "http://localhost:5000/transactions";
 
 const getBarChart = async (month) => {
   const response = await axios.get(`${baseUrl}/barchart?month=${month}`);
@@ -22,9 +22,28 @@ const getTransactions = async (month, search, page) => {
   return response.data;
 };
 
-const getChartTransaction = async (month) => {
-  const response = await axios.get(`${baseUrl}/testing`);
-  return response;
+const fetchCombinedData = async (month) => {
+  try {
+    const response = await axios.get(`${baseUrl}/combined`, {
+      params: { month },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching combined data:', error);
+    throw error;
+  }
 };
 
-export { getBarChart, getPieChart, getStatistics, getTransactions,getChartTransaction };
+const fetchData = async () => {
+  try {
+    const response = await axios.get('http://localhost:5000/transactions');
+    const data = response.data;
+    return data 
+  } catch (error) {
+    console.error('Error fetching data:', error);
+    throw error;
+  }
+};
+
+
+export { getBarChart, getPieChart, getStatistics, getTransactions,fetchCombinedData , fetchData};

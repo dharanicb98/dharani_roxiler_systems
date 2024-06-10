@@ -7,7 +7,7 @@ const fetchAndSeedData = async (req, res) => {
       "https://s3.amazonaws.com/roxiler.com/product_transaction.json"
     );
     // await Transaction.deleteMany({});
-    await Transaction.insertMany(response.data);
+    // await Transaction.insertMany(response.data);
     res.send(response.data);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -16,23 +16,28 @@ const fetchAndSeedData = async (req, res) => {
 
 const getTestingData = async (req, res) => {
   try {
-    const response = await Transaction.find();
-    console.log("this is testing" , response)
-    res.send(response);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
+    const transactions = await Transaction.find();
+    // console.log("this backend data" , transactions)
+    res.json(transactions);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 };
 
 const listTransactions = async (req, res) => {
   try {
     const { month, search = "", page = 1, perPage = 10 } = req.query;
+
+    if (!month || !/^(0[1-9]|1[0-2])$/.test(month)) {
+      return res.status(400).json({ message: "Invalid month parameter" });
+    }
+
     const startDate = new Date(`2021-${month}-01`);
-    const endDate = new Date(
-      startDate.getFullYear(),
-      startDate.getMonth() + 1,
-      0
-    );
+    const endDate = new Date(startDate.getFullYear(), startDate.getMonth() + 1, 0);
+
+    if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
+      return res.status(400).json({ message: "Invalid date range" });
+    }
 
     const query = {
       dateOfSale: { $gte: startDate, $lt: endDate },
@@ -51,12 +56,12 @@ const listTransactions = async (req, res) => {
       .limit(Number(perPage));
 
     res.json(transactions);
-    // res.send(transactions)
   } catch (error) {
     console.error("Error in listTransactions:", error);
     res.status(500).json({ message: error.message });
   }
 };
+
 
 const getStatistics = async (req, res) => {
   try {
@@ -134,22 +139,20 @@ const getPieChart = async (req, res) => {
   try {
     const { month } = req.query;
     const startDate = new Date(`2021-${month}-01`);
-    const endDate = new Date(
-      startDate.getFullYear(),
-      startDate.getMonth() + 1,
-      0
-    );
+    const endDate = new Date(startDate.getFullYear(), startDate.getMonth() + 1, 0);
 
     const categories = await Transaction.aggregate([
       { $match: { dateOfSale: { $gte: startDate, $lt: endDate } } },
-      { $group: { _id: "$category", count: { $sum: 1 } } },
+      { $group: { _id: "$category", count: { $sum: 1 } } }
     ]);
 
     res.json(categories);
   } catch (error) {
+    console.error('Error in getPieChart:', error);
     res.status(500).json({ message: error.message });
   }
 };
+
 
 const getCombinedData = async (req, res) => {
   try {
@@ -162,6 +165,7 @@ const getCombinedData = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
 
 module.exports = {
   fetchAndSeedData,
