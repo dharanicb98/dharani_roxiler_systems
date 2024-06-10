@@ -7,7 +7,7 @@ const BarChart = ({ month }) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await axios.get(`http://localhost:3000/api/transactions/barchart?month=${month}`);
+      const response = await axios.get(`http://localhost:5000/api/transactions/barchart?month=${month}`);
       setData(response.data);
     };
 
@@ -15,10 +15,10 @@ const BarChart = ({ month }) => {
   }, [month]);
 
   const chartData = {
-    labels: data.map(d => d.range),
+    labels: data?.map(d => d.range),
     datasets: [{
       label: 'Number of Items',
-      data: data.map(d => d.count),
+      data: data?.map(d => d.count),
       backgroundColor: 'rgba(75, 192, 192, 0.6)'
     }]
   };

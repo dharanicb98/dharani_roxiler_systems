@@ -6,8 +6,8 @@ const Statistics = ({ month }) => {
 
   useEffect(() => {
     const fetchStatistics = async () => {
-      const response = await axios.get(`http://localhost:3000/api/transactions/statistics?month=${month}`);
-      setStatistics(response.data);
+      const response = await axios.get(`http://localhost:5000/api/transactions/statistics?month=${month}`);
+      setStatistics(response?.data);
     };
 
     fetchStatistics();
@@ -15,9 +15,9 @@ const Statistics = ({ month }) => {
 
   return (
     <div>
-      <p>Total Sales: {statistics.totalSales}</p>
-      <p>Sold Items: {statistics.soldItems}</p>
-      <p>Not Sold Items: {statistics.notSoldItems}</p>
+      <p>Total Sales: {statistics?.totalSales}</p>
+      <p>Sold Items: {statistics?.soldItems}</p>
+      <p>Not Sold Items: {statistics?.notSoldItems}</p>
     </div>
   );
 };

@@ -8,8 +8,8 @@ const TransactionTable = ({ month }) => {
 
   useEffect(() => {
     const fetchTransactions = async () => {
-      const response = await axios.get(`http://localhost:3000/api/transactions/list?month=${month}&search=${search}&page=${page}`);
-      setTransactions(response.data);
+      const response = await axios.get(`http://localhost:5000/api/transactions/list?month=${month}&search=${search}&page=${page}`);
+      setTransactions(response?.data);
     };
 
     fetchTransactions();
@@ -28,7 +28,7 @@ const TransactionTable = ({ month }) => {
           </tr>
         </thead>
         <tbody>
-          {transactions.map(transaction => (
+          {transactions?.map(transaction => (
             <tr key={transaction._id}>
               <td>{transaction.title}</td>
               <td>{transaction.description}</td>

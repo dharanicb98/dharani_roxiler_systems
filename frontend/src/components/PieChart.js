@@ -7,7 +7,7 @@ const PieChart = ({ month }) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await axios.get(`http://localhost:3000/api/transactions/piechart?month=${month}`);
+      const response = await axios.get(`http://localhost:5000/api/transactions/piechart?month=${month}`);
       setData(response.data);
     };
 
@@ -15,10 +15,10 @@ const PieChart = ({ month }) => {
   }, [month]);
 
   const chartData = {
-    labels: data.map(d => d._id),
+    labels: data?.map(d => d._id),
     datasets: [{
       label: 'Number of Items',
-      data: data.map(d => d.count),
+      data: data?.map(d => d.count),
       backgroundColor: ['rgba(75, 192, 192, 0.6)', 'rgba(54, 162, 235, 0.6)', 'rgba(255, 206, 86, 0.6)']
     }]
   };
