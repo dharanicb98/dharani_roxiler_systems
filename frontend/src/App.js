@@ -3,13 +3,15 @@ import TransactionTable from './components/TransactionTable';
 import Statistics from './components/Statistics';
 import BarChart from './components/BarChart';
 import PieChart from './components/PieChart';
+import { INPUT_STYLE } from './constants';
+import "./App.css"
 
 const App = () => {
   const [month, setMonth] = useState('03');
 
   return (
     <div>
-      <select value={month} onChange={e => setMonth(e.target.value)}>
+      <select value={month} className={`${INPUT_STYLE} w-[40%] my-2`}  onChange={e => setMonth(e.target.value)}>
         <option value="01">January</option>
         <option value="02">February</option>
         <option value="03">March</option>

@@ -1,18 +1,26 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect, useRef } from 'react';
+import { Chart, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Pie } from 'react-chartjs-2';
+import { getPieChart } from '../services';
+
+// Register the necessary components
+Chart.register(ArcElement, Tooltip, Legend);
 
 const PieChart = ({ month }) => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      const response = await axios.get(`http://localhost:5000/api/transactions/piechart?month=${month}`);
-      setData(response.data);
-    };
-
     fetchData();
   }, [month]);
+
+  const fetchData = async () => {
+    try {
+      const response = await getPieChart(month);
+      setData(response);
+    } catch (err) {
+      console.log("error", err?.message);
+    }
+  };
 
   const chartData = {
     labels: data?.map(d => d._id),

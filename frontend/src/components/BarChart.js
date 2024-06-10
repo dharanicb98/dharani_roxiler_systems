@@ -1,18 +1,26 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect, useRef } from 'react';
+import { Chart, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
+import { getBarChart } from '../services';
+
+// Register the necessary components
+Chart.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 const BarChart = ({ month }) => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      const response = await axios.get(`http://localhost:5000/api/transactions/barchart?month=${month}`);
-      setData(response.data);
-    };
-
     fetchData();
   }, [month]);
+
+  const fetchData = async () => {
+    try {
+      const response = await getBarChart(month);
+      setData(response);
+    } catch (err) {
+      console.log("error", err?.message);
+    }
+  };
 
   const chartData = {
     labels: data?.map(d => d.range),

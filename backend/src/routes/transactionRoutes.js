@@ -6,7 +6,8 @@ const {
   getBarChart,
   getPieChart,
   getCombinedData
-} = require('../controllers/transactionController');
+} = require('../controllers/transactionController'); // corrected the file name here
+
 
 const router = express.Router();
 

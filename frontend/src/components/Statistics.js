@@ -1,17 +1,24 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import { getStatistics } from '../services';
 
 const Statistics = ({ month }) => {
   const [statistics, setStatistics] = useState({ totalSales: 0, soldItems: 0, notSoldItems: 0 });
 
   useEffect(() => {
-    const fetchStatistics = async () => {
-      const response = await axios.get(`http://localhost:5000/api/transactions/statistics?month=${month}`);
-      setStatistics(response?.data);
-    };
-
     fetchStatistics();
   }, [month]);
+
+
+  const fetchStatistics = async() => {
+    try {
+      const response = await getStatistics(month);
+      setStatistics(response)
+    }
+    catch(err){
+      console.log("error" , err?.message)
+    }
+  }
+
 
   return (
     <div>
