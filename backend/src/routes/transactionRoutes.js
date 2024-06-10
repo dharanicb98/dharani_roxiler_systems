@@ -1,4 +1,5 @@
 const express = require('express');
+const router = express.Router();
 const {
   fetchAndSeedData,
   listTransactions,
@@ -6,10 +7,7 @@ const {
   getBarChart,
   getPieChart,
   getCombinedData
-} = require('../controllers/transactionController'); // corrected the file name here
-
-
-const router = express.Router();
+} = require('../controllers/transactionController');
 
 router.get('/seed', fetchAndSeedData);
 router.get('/list', listTransactions);

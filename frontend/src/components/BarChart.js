@@ -1,12 +1,8 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Chart, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
-import { Bar } from 'react-chartjs-2';
+import React, { useState, useEffect } from 'react';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 import { getBarChart } from '../services';
 
-// Register the necessary components
-Chart.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
-
-const BarChart = ({ month }) => {
+const BarChartComponent = ({ month }) => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
@@ -22,16 +18,18 @@ const BarChart = ({ month }) => {
     }
   };
 
-  const chartData = {
-    labels: data?.map(d => d.range),
-    datasets: [{
-      label: 'Number of Items',
-      data: data?.map(d => d.count),
-      backgroundColor: 'rgba(75, 192, 192, 0.6)'
-    }]
-  };
+console.log("this barchat" , data)
 
-  return <Bar data={chartData} />;
+  return (
+    <BarChart width={600} height={300} data={data}>
+      <CartesianGrid strokeDasharray="3 3" />
+      <XAxis dataKey="range" />
+      <YAxis />
+      <Tooltip />
+      <Legend />
+      <Bar dataKey="count" fill="#8884d8" />
+    </BarChart>
+  );
 };
 
-export default BarChart;
+export default BarChartComponent;

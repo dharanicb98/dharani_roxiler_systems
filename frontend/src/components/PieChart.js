@@ -1,12 +1,11 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Chart, ArcElement, Tooltip, Legend } from 'chart.js';
-import { Pie } from 'react-chartjs-2';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { PieChart, Pie, Tooltip, Legend, Cell } from 'recharts';
 import { getPieChart } from '../services';
 
-// Register the necessary components
-Chart.register(ArcElement, Tooltip, Legend);
+const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#AF19FF'];
 
-const PieChart = ({ month }) => {
+const PieChartComponent = ({ month }) => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
@@ -22,16 +21,28 @@ const PieChart = ({ month }) => {
     }
   };
 
-  const chartData = {
-    labels: data?.map(d => d._id),
-    datasets: [{
-      label: 'Number of Items',
-      data: data?.map(d => d.count),
-      backgroundColor: ['rgba(75, 192, 192, 0.6)', 'rgba(54, 162, 235, 0.6)', 'rgba(255, 206, 86, 0.6)']
-    }]
-  };
+  console.log("this piechat" , data)
 
-  return <Pie data={chartData} />;
+  return (
+    <PieChart width={400} height={400}>
+      <Pie
+        data={data}
+        dataKey="count"
+        nameKey="_id"
+        cx="50%"
+        cy="50%"
+        outerRadius={100}
+        fill="#8884d8"
+        label
+      >
+        {data.map((entry, index) => (
+          <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+        ))}
+      </Pie>
+      <Tooltip />
+      <Legend />
+    </PieChart>
+  );
 };
 
-export default PieChart;
+export default PieChartComponent;
