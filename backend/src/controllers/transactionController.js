@@ -3,12 +3,24 @@ const Transaction = require("../models/Transaction");
 
 const fetchAndSeedData = async (req, res) => {
   try {
-    const response = await axios.get("https://s3.amazonaws.com/roxiler.com/product_transaction.json");
-    await Transaction.deleteMany({});
+    const response = await axios.get(
+      "https://s3.amazonaws.com/roxiler.com/product_transaction.json"
+    );
+    // await Transaction.deleteMany({});
     await Transaction.insertMany(response.data);
-    res.send("Database seeded");
+    res.send(response.data);
   } catch (error) {
     res.status(500).json({ message: error.message });
+  }
+};
+
+const getTestingData = async (req, res) => {
+  try {
+    const response = await Transaction.find();
+    console.log("this is testing" , response)
+    res.send(response.data);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
   }
 };
 
@@ -16,14 +28,18 @@ const listTransactions = async (req, res) => {
   try {
     const { month, search = "", page = 1, perPage = 10 } = req.query;
     const startDate = new Date(`2021-${month}-01`);
-    const endDate = new Date(startDate.getFullYear(), startDate.getMonth() + 1, 0);
+    const endDate = new Date(
+      startDate.getFullYear(),
+      startDate.getMonth() + 1,
+      0
+    );
 
     const query = {
       dateOfSale: { $gte: startDate, $lt: endDate },
       $or: [
         { title: new RegExp(search, "i") },
-        { description: new RegExp(search, "i") }
-      ]
+        { description: new RegExp(search, "i") },
+      ],
     };
 
     if (!isNaN(search)) {
@@ -35,8 +51,9 @@ const listTransactions = async (req, res) => {
       .limit(Number(perPage));
 
     res.json(transactions);
+    // res.send(transactions)
   } catch (error) {
-    console.error('Error in listTransactions:', error);
+    console.error("Error in listTransactions:", error);
     res.status(500).json({ message: error.message });
   }
 };
@@ -45,25 +62,29 @@ const getStatistics = async (req, res) => {
   try {
     const { month } = req.query;
     const startDate = new Date(`2021-${month}-01`);
-    const endDate = new Date(startDate.getFullYear(), startDate.getMonth() + 1, 0);
+    const endDate = new Date(
+      startDate.getFullYear(),
+      startDate.getMonth() + 1,
+      0
+    );
 
     const soldItems = await Transaction.countDocuments({
       dateOfSale: { $gte: startDate, $lt: endDate },
-      sold: true
+      sold: true,
     });
     const notSoldItems = await Transaction.countDocuments({
       dateOfSale: { $gte: startDate, $lt: endDate },
-      sold: false
+      sold: false,
     });
     const totalSales = await Transaction.aggregate([
       { $match: { dateOfSale: { $gte: startDate, $lt: endDate }, sold: true } },
-      { $group: { _id: null, total: { $sum: "$price" } } }
+      { $group: { _id: null, total: { $sum: "$price" } } },
     ]);
 
     res.json({
       totalSales: totalSales[0] ? totalSales[0].total : 0,
       soldItems,
-      notSoldItems
+      notSoldItems,
     });
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -74,7 +95,11 @@ const getBarChart = async (req, res) => {
   try {
     const { month } = req.query;
     const startDate = new Date(`2021-${month}-01`);
-    const endDate = new Date(startDate.getFullYear(), startDate.getMonth() + 1, 0);
+    const endDate = new Date(
+      startDate.getFullYear(),
+      startDate.getMonth() + 1,
+      0
+    );
 
     const priceRanges = [
       { range: "0-100", min: 0, max: 100 },
@@ -86,14 +111,14 @@ const getBarChart = async (req, res) => {
       { range: "601-700", min: 601, max: 700 },
       { range: "701-800", min: 701, max: 800 },
       { range: "801-900", min: 801, max: 900 },
-      { range: "901-above", min: 901, max: Infinity }
+      { range: "901-above", min: 901, max: Infinity },
     ];
 
     const data = await Promise.all(
       priceRanges.map(async (range) => {
         const count = await Transaction.countDocuments({
           dateOfSale: { $gte: startDate, $lt: endDate },
-          price: { $gte: range.min, $lte: range.max }
+          price: { $gte: range.min, $lte: range.max },
         });
         return { range: range.range, count };
       })
@@ -109,11 +134,15 @@ const getPieChart = async (req, res) => {
   try {
     const { month } = req.query;
     const startDate = new Date(`2021-${month}-01`);
-    const endDate = new Date(startDate.getFullYear(), startDate.getMonth() + 1, 0);
+    const endDate = new Date(
+      startDate.getFullYear(),
+      startDate.getMonth() + 1,
+      0
+    );
 
     const categories = await Transaction.aggregate([
       { $match: { dateOfSale: { $gte: startDate, $lt: endDate } } },
-      { $group: { _id: "$category", count: { $sum: 1 } } }
+      { $group: { _id: "$category", count: { $sum: 1 } } },
     ]);
 
     res.json(categories);
@@ -140,5 +169,6 @@ module.exports = {
   getStatistics,
   getBarChart,
   getPieChart,
-  getCombinedData
+  getCombinedData,
+  getTestingData,
 };

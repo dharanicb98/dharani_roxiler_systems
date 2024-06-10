@@ -22,4 +22,9 @@ const getTransactions = async (month, search, page) => {
   return response.data;
 };
 
-export { getBarChart, getPieChart, getStatistics, getTransactions };
+const getChartTransaction = async (month) => {
+  const response = await axios.get(`${baseUrl}/testing`);
+  return response;
+};
+
+export { getBarChart, getPieChart, getStatistics, getTransactions,getChartTransaction };

@@ -19,6 +19,7 @@ const Statistics = ({ month }) => {
     }
   }
 
+  console.log("statistics" , statistics)
 
   return (
     <div>

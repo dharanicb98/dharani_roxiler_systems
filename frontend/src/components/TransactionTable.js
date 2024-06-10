@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getTransactions } from '../services';
+import { getChartTransaction, getTransactions } from '../services';
 import { INPUT_STYLE } from '../constants';
 
 const TransactionTable = ({ month }) => {
@@ -9,7 +9,8 @@ const TransactionTable = ({ month }) => {
 
   const fetchTransactions = async() => {
     try {
-      const response = await getTransactions(month, search, page);
+      // const response = await getTransactions(month, search, page);
+      const response = await getChartTransaction();
       setTransactions(response)
     }
     catch(err){
@@ -21,6 +22,9 @@ const TransactionTable = ({ month }) => {
     fetchTransactions();
   }, [month, search, page]);
   
+
+console.log("transactions" , transactions)
+
 
   return (
     <div>
@@ -35,14 +39,14 @@ const TransactionTable = ({ month }) => {
           </tr>
         </thead>
         <tbody>
-          {transactions?.map(transaction => (
+          {/* {transactions?.map(transaction => (
             <tr key={transaction._id}>
               <td>{transaction.title}</td>
               <td>{transaction.description}</td>
               <td>{transaction.price}</td>
               <td>{new Date(transaction.dateOfSale).toLocaleDateString()}</td>
             </tr>
-          ))}
+          ))} */}
         </tbody>
       </table>
       <button className="bg-[#007bff] hover:bg-slate-700 text-white font-bold py-2 mx-3 my-3 px-4 rounded sm:text-[16px] self-center" onClick={() => setPage(page - 1)} disabled={page === 1}>Previous</button>
