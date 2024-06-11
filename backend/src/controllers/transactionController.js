@@ -146,12 +146,18 @@ const getPieChart = async (req, res) => {
       { $group: { _id: "$category", count: { $sum: 1 } } }
     ]);
 
-    res.json(categories);
+    const responseData = categories.map(category => ({
+      label: category._id,
+      value: category.count,
+    }));
+
+    res.json(responseData);
   } catch (error) {
     console.error('Error in getPieChart:', error);
     res.status(500).json({ message: error.message });
   }
 };
+
 
 
 const getCombinedData = async (req, res) => {

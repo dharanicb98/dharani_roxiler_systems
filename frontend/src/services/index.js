@@ -9,6 +9,7 @@ const getBarChart = async (month) => {
 
 const getPieChart = async (month) => {
   const response = await axios.get(`${baseUrl}/piechart?month=${month}`);
+  console.log(response, "this is piechat")
   return response.data;
 };
 

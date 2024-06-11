@@ -7,7 +7,7 @@ import { INPUT_STYLE } from '../constants';
 import PieChartComponent from './PieChart';
 
 const Dashboard = () => {
-    const [month, setMonth] = useState("03");
+    const [month, setMonth] = useState("09");
 
     return (
         <div>

@@ -8,7 +8,7 @@ import Products from '../components/products';
 
 
 const ProtectedRoutes = () => {
-    const [month, setMonth] = useState("03");
+    const [month, setMonth] = useState("09");
     
   return (
     <div>
